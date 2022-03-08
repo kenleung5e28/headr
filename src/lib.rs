@@ -60,10 +60,16 @@ pub fn get_args() -> MyResult<Config> {
 }
 
 pub fn run(config: Config) ->  MyResult<()> {
+    let count = config.files.len();
     for filename in config.files {
         match open(&filename) {
-            Err(err) => eprintln!("{}: {}", filename, err),
-            Ok(_) => println!("Opened {}", filename),
+            Err(e) => println!("head: {}: {}", filename, e),
+            Ok(buf) => {
+                if count > 1 {
+                    println!("==> {} <==", filename);
+        
+                }
+            }
         }
     }
     Ok(())
