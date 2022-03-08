@@ -74,6 +74,7 @@ pub fn run(config: Config) ->  MyResult<()> {
                 if let Some(n) = config.bytes {
                     let mut bytes_read: Vec<u8> = vec![0; n];
                     buf.read_exact(&mut bytes_read)?;
+                    println!("{:#?}", bytes_read);
                     println!("{}", String::from_utf8_lossy(&bytes_read));
                     return Ok(())
                 }
