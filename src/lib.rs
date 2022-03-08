@@ -61,13 +61,28 @@ pub fn get_args() -> MyResult<Config> {
 
 pub fn run(config: Config) ->  MyResult<()> {
     let count = config.files.len();
-    for filename in config.files {
+    for (i, filename) in config.files.iter().enumerate() {
         match open(&filename) {
             Err(e) => println!("head: {}: {}", filename, e),
-            Ok(buf) => {
+            Ok(mut buf) => {
+                if i > 0 {
+                    println!();
+                }
                 if count > 1 {
                     println!("==> {} <==", filename);
-        
+                }
+                if let Some(n) = config.bytes {
+                    let mut bytes_read: Vec<u8> = vec![0; n];
+                    buf.read_exact(&mut bytes_read)?;
+                    println!("{}", String::from_utf8_lossy(&bytes_read));
+                    return Ok(())
+                }
+                for _ in 1..(config.lines + 1) {
+                    let mut line_read = String::new();
+                    if buf.read_line(&mut line_read)? == 0 {
+                        break;
+                    }
+                    print!("{}", line_read);
                 }
             }
         }
