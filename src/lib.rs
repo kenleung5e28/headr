@@ -72,9 +72,8 @@ pub fn run(config: Config) ->  MyResult<()> {
                     println!("==> {} <==", filename);
                 }
                 if let Some(n) = config.bytes {
-                    let mut read_buffer = vec![0; n];
-                    let size_read = buf.read(&mut read_buffer)?;
-                    print!("{}", String::from_utf8_lossy(&read_buffer[..size_read]));
+                    let bytes_read = buf.bytes().take(n).collect::<Result<Vec<_>, _>>()?;
+                    print!("{}", String::from_utf8_lossy(&bytes_read));
                     continue;
                 }
                 for _ in 0..config.lines {
