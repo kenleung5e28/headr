@@ -73,8 +73,7 @@ pub fn run(config: Config) ->  MyResult<()> {
                 }
                 if let Some(n) = config.bytes {
                     let mut read_buffer = vec![0; n];
-                    let mut handle = buf.take(n as u64);
-                    let size_read = handle.read(&mut read_buffer)?;
+                    let size_read = buf.read(&mut read_buffer)?;
                     print!("{}", String::from_utf8_lossy(&read_buffer[..size_read]));
                     continue;
                 }
